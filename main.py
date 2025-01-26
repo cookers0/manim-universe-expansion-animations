@@ -1,6 +1,6 @@
 from manim import *
 
-class Anim1(Scene):
+class AnimationFull(Scene):
     def construct(self):
         dot1 = Dot(color=BLUE).shift(LEFT)
         dot2 = Dot(color=YELLOW)
@@ -194,52 +194,41 @@ class Anim1(Scene):
         )
         self.play(
             d1.animate.shift(0.75*RIGHT),
-            d2.animate.shift(1.5*LEFT),
+            d2.animate.shift(1*LEFT),
             hubble_radius.animate.scale(2/3),
             v1gtv2.animate.shift(0.5*LEFT, 0.5*DOWN),
             run_time = 2
         )
         HS = MathTex('Hubble-Radius').shift(3*RIGHT, 2*UP)
         self.play(ReplacementTransform(v1gtv2, HS))
-        self.wait(2)
-
-class Anim2(Scene):
-    def construct(self):
-        hubble_radius = Circle(radius=2.0, color=WHITE)
-        center = Dot(color=BLUE)
-        d1 = Dot(color=YELLOW).shift(LEFT)
-        d2 = Dot(color=RED).shift(2*RIGHT)
-
-
         arrow1 = Arrow(2*RIGHT, 3.25*RIGHT).shift(0.16*LEFT)
         arrow2 = Arrow(2*RIGHT, 0.75*RIGHT).shift(0.16*RIGHT)
         arrowend = Dot().shift(2*RIGHT, 0.3*UP)
         arrow3 = Arrow(start=RIGHT, end=LEFT, color=WHITE, max_tip_length_to_length_ratio=0.1).shift(2.46*RIGHT).scale(0.6)
         r = MathTex('r').shift(2*RIGHT, 2*UP)
-        HS = MathTex('Hubble-Radius').shift(3*RIGHT, 2*UP)
         v = MathTex('v = c').shift(2.5*RIGHT, 0.5*UP).scale(0.75)
         c = MathTex('c').shift(1.5*RIGHT, 0.5*UP).scale(0.75)
-        Horizon = MathTex('Kosmischer  Ereignishorizont').shift(4.5*RIGHT, 3*UP).scale(0.5)
+        Horizon = MathTex('Kosmischer  Ereignishorizont').shift(4.5*RIGHT, 2.5*UP).scale(0.65)
+        HorizonSize = MathTex(r'\simeq17*10^9ly').shift(5*RIGHT, 2*UP).scale(0.7)
         csmall = MathTex('c < v').shift(2.5*RIGHT, 0.5*UP).scale(0.75)
         textmiddle = Dot().shift(2*RIGHT, 0.5*UP)
         textmiddle2 = Dot().shift(3*RIGHT, 0.5*UP)
-
-
-        group1 = VGroup(hubble_radius, center, d1, d2, HS)
         group2 = VGroup(arrow1, arrow2, v, c)
         group3 = VGroup(arrow3, csmall)
-
-        self.add(group1)
+        self.wait(6)
+        self.play(ReplacementTransform(HS, r), run_time=(3))
+        self.remove(HS, v1gtv2)
         self.wait(2)
-        self.play(Transform(HS, r))
         self.play(
             GrowArrow(arrow1),
-            GrowFromPoint(v, textmiddle)
+            GrowFromPoint(v, textmiddle),
+            run_time=(2)
                   )
-        self.wait(3)
+        self.wait(4)
         self.play(
             GrowArrow(arrow2),
-            GrowFromPoint(c, textmiddle)
+            GrowFromPoint(c, textmiddle),
+            run_time=(2)
             )
         self.wait(3)
         self.play(FadeOut(group2))
@@ -257,5 +246,12 @@ class Anim2(Scene):
             r.animate.shift(RIGHT, UP),
             run_time=4
             )
-        self.play(Transform(r, Horizon))
+        self.play(Transform(r, Horizon), run_time=(2))
+        self.wait(1.5)
+        self.play(FadeIn(HorizonSize, target_position=Horizon))
         self.wait(3)
+        end = VGroup(r, HorizonSize, group)
+        self.play(
+            FadeOut(end),
+            run_time=(3)
+        )
